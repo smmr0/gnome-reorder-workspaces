@@ -7,7 +7,7 @@
 		</key>
 		<key name="move-workspace-down" type="as">
 			<default><![CDATA[['<Alt>Down']]]></default>
-			<summary>Move active workspace one position up</summary>
+			<summary>Move active workspace one position down</summary>
 		</key>
 	</schema>
 </schemalist>
