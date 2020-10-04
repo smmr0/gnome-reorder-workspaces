@@ -20,6 +20,25 @@ const Main = imports.ui.main;
 function init() {}
 
 function enable() {
+	if (Main.overview._visible) {
+		enableKeybindings();
+	}
+
+	Main.overview.connect('showing', () => {
+		log('showing');
+		enableKeybindings();
+	});
+	Main.overview.connect('hiding', () => {
+		log('hiding');
+		disableKeybindings();
+	});
+}
+
+function disable() {
+	disableKeybindings();
+}
+
+function enableKeybindings() {
 	const settings = ExtensionUtils.getSettings();
 
 	Main.wm.addKeybinding(
@@ -50,7 +69,7 @@ function enable() {
 	);
 }
 
-function disable() {
+function disableKeybindings() {
 	Main.wm.removeKeybinding('move-workspace-up');
 	Main.wm.removeKeybinding('move-workspace-down');
 }
