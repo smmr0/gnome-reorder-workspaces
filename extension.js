@@ -61,6 +61,12 @@ function enableKeybindings() {
 		Shell.ActionMode.OVERVIEW,
 		() => {
 			const activeWorkspace = global.workspace_manager.get_active_workspace();
+			const nextWorkspace = global.workspace_manager.get_workspace_by_index(activeWorkspace.index() + 1)
+
+			if (nextWorkspace !== null && nextWorkspace.n_windows === 0) {
+				return;
+			}
+
 			global.workspace_manager.reorder_workspace(
 				activeWorkspace,
 				activeWorkspace.index() + 1
