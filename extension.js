@@ -17,6 +17,9 @@ const { Meta, Shell } = imports.gi;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Main = imports.ui.main;
 
+let overviewShowingId;
+let overviewHidingId;
+
 function init() {}
 
 function enable() {
@@ -24,16 +27,21 @@ function enable() {
 		enableKeybindings();
 	}
 
-	Main.overview.connect('showing', () => {
-		enableKeybindings();
-	});
-	Main.overview.connect('hiding', () => {
-		disableKeybindings();
-	});
+	overviewShowingId =
+		Main.overview.connect('showing', () => {
+			enableKeybindings();
+		});
+	overviewHidingId =
+		Main.overview.connect('hiding', () => {
+			disableKeybindings();
+		});
 }
 
 function disable() {
 	disableKeybindings();
+
+	Main.overview.disconnect(overviewShowingId);
+	Main.overview.disconnect(overviewHidingId);
 }
 
 function enableKeybindings() {
