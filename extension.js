@@ -25,11 +25,9 @@ function enable() {
 	}
 
 	Main.overview.connect('showing', () => {
-		log('showing');
 		enableKeybindings();
 	});
 	Main.overview.connect('hiding', () => {
-		log('hiding');
 		disableKeybindings();
 	});
 }
