@@ -25,14 +25,14 @@ let mutterSettings;
 let dynamicWorkspacesId;
 let enabledDynamicWorkspaces;
 
-function init() {}
+function init() {} // eslint-disable-line no-unused-vars
 
-function enable() {
+function enable() { // eslint-disable-line no-unused-vars
 
 	mutterSettings = new Gio.Settings({ schema_id: MUTTER_SCHEMA });
 	dynamicWorkspacesId = mutterSettings.connect(
-	    'changed::dynamic-workspaces',
-	    this.updateWorkspacesType.bind(this)
+		'changed::dynamic-workspaces',
+		this.updateWorkspacesType.bind(this)
 	);
 	// set initial workspace type
 	updateWorkspacesType();
@@ -52,11 +52,11 @@ function enable() {
 }
 
 function updateWorkspacesType() {
-    enabledDynamicWorkspaces = mutterSettings.get_boolean('dynamic-workspaces');
+	enabledDynamicWorkspaces = mutterSettings.get_boolean('dynamic-workspaces');
 }
 
 
-function disable() {
+function disable() { // eslint-disable-line no-unused-vars
 	disableKeybindings();
 
 	Main.overview.disconnect(overviewShowingId);
@@ -112,13 +112,13 @@ function moveWorkspaceUp () {
 	global.workspace_manager.reorder_workspace(
 		activeWorkspace,
 		aboveWorkspaceIndex
-	)
+	);
 }
 
 function moveWorkspaceDown() {
 	const activeWorkspace = global.workspace_manager.get_active_workspace();
 	const workspaceIndexCount = global.workspace_manager.get_n_workspaces() - 1;
-	const activeWorkspaceIndex = activeWorkspace.index()
+	const activeWorkspaceIndex = activeWorkspace.index();
 
 	let belowWorkspaceIndex;
 	// if we are at the end the "below" workspace is the active workspace
@@ -126,13 +126,13 @@ function moveWorkspaceDown() {
 		belowWorkspaceIndex = activeWorkspaceIndex;
 	}
 	else {
-		belowWorkspaceIndex	= activeWorkspaceIndex + 1;
+		belowWorkspaceIndex = activeWorkspaceIndex + 1;
 	}
 
 	// if using dynamic workspaces, check below workspace for existance and
 	// presence of wirndows
 	if (enabledDynamicWorkspaces === true) {
-		const belowWorkspace = global.workspace_manager.get_workspace_by_index(belowWorkspaceIndex)
+		const belowWorkspace = global.workspace_manager.get_workspace_by_index(belowWorkspaceIndex);
 		if (belowWorkspace !== null && belowWorkspace.n_windows === 0) {
 			return;
 		}
@@ -142,5 +142,5 @@ function moveWorkspaceDown() {
 	global.workspace_manager.reorder_workspace(
 		activeWorkspace,
 		belowWorkspaceIndex
-	)
+	);
 }
