@@ -1,0 +1,78 @@
+{
+	"extends": "eslint:recommended",
+	"parserOptions": {
+		"ecmaVersion": 2019, // https://gitlab.gnome.org/GNOME/gjs/-/blob/gnome-3-38/doc/Home.md#L3
+		"sourceType": "script"
+	},
+	"env": {
+		"es2017": true
+	},
+	"reportUnusedDisableDirectives": true,
+	"rules": {
+		"indent": [
+			"error",
+			"tab"
+		],
+		"linebreak-style": [
+			"error",
+			"unix"
+		],
+		"quotes": [
+			"error",
+			"single",
+			{
+				"avoidEscape": true
+			}
+		],
+		"semi": [
+			"error",
+			"always"
+		],
+		"no-undef": [
+			"off"
+		],
+		"eqeqeq": [
+			"error"
+		],
+		"no-var": [
+			"error"
+		],
+		"prefer-const": [
+			"error"
+		],
+		"prefer-arrow-callback": [
+			"error"
+		],
+		"no-console": [
+			"error"
+		],
+		"array-callback-return": [
+			"error"
+		],
+		"block-scoped-var": [
+			"error"
+		],
+		"curly": [
+			"error",
+			"all"
+		],
+		"dot-notation": [
+			"error"
+		],
+		"no-alert": [
+			"error"
+		],
+		"no-eval": [
+			"error"
+		],
+		"no-implied-eval": [
+			"error"
+		],
+		"no-multi-spaces": [
+			"error"
+		],
+		"no-script-url": [
+			"error"
+		]
+	}
+}

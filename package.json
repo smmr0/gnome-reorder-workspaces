@@ -1,0 +1,11 @@
+{
+	"installConfig": {
+		"pnp": true
+	},
+	"scripts": {
+		"lint": "eslint ."
+	},
+	"devDependencies": {
+		"eslint": "^7.13.0"
+	}
+}
