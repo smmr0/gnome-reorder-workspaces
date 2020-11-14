@@ -13,16 +13,30 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-const { Meta, Shell } = imports.gi;
+const { Gio, Meta, Shell } = imports.gi;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Main = imports.ui.main;
 
 let overviewShowingId;
 let overviewHidingId;
 
+const MUTTER_SCHEMA = 'org.gnome.mutter';
+let mutterSettings;
+let dynamicWorkspacesId;
+let enabledDynamicWorkspaces;
+
 function init() {}
 
 function enable() {
+
+	mutterSettings = new Gio.Settings({ schema_id: MUTTER_SCHEMA });
+	dynamicWorkspacesId = mutterSettings.connect(
+	    'changed::dynamic-workspaces',
+	    this.updateWorkspacesType.bind(this)
+	);
+	// set initial workspace type
+	updateWorkspacesType();
+
 	if (Main.overview._visible) {
 		enableKeybindings();
 	}
@@ -37,11 +51,17 @@ function enable() {
 		});
 }
 
+function updateWorkspacesType() {
+    enabledDynamicWorkspaces = mutterSettings.get_boolean('dynamic-workspaces');
+}
+
+
 function disable() {
 	disableKeybindings();
 
 	Main.overview.disconnect(overviewShowingId);
 	Main.overview.disconnect(overviewHidingId);
+	mutterSettings.disconnect(dynamicWorkspacesId);
 }
 
 function enableKeybindings() {
@@ -52,36 +72,75 @@ function enableKeybindings() {
 		settings,
 		Meta.KeyBindingFlags.NONE,
 		Shell.ActionMode.OVERVIEW,
-		() => {
-			const activeWorkspace = global.workspace_manager.get_active_workspace();
-			global.workspace_manager.reorder_workspace(
-				activeWorkspace,
-				activeWorkspace.index() - 1
-			)
-		}
+		moveWorkspaceUp.bind(this)
 	);
 	Main.wm.addKeybinding(
 		'move-workspace-down',
 		settings,
 		Meta.KeyBindingFlags.NONE,
 		Shell.ActionMode.OVERVIEW,
-		() => {
-			const activeWorkspace = global.workspace_manager.get_active_workspace();
-			const nextWorkspace = global.workspace_manager.get_workspace_by_index(activeWorkspace.index() + 1)
-
-			if (nextWorkspace !== null && nextWorkspace.n_windows === 0) {
-				return;
-			}
-
-			global.workspace_manager.reorder_workspace(
-				activeWorkspace,
-				activeWorkspace.index() + 1
-			)
-		}
+		moveWorkspaceDown.bind(this)
 	);
 }
 
 function disableKeybindings() {
 	Main.wm.removeKeybinding('move-workspace-up');
 	Main.wm.removeKeybinding('move-workspace-down');
+}
+
+
+function moveWorkspaceUp () {
+	const activeWorkspace = global.workspace_manager.get_active_workspace();
+
+	let aboveWorkspaceIndex;
+	// if we are at the start the "above" workspace is the active workspace
+	if ((activeWorkspace.index() - 1) < 0) {
+		aboveWorkspaceIndex = 0;
+	}
+	else {
+		aboveWorkspaceIndex = activeWorkspace.index() - 1;
+	}
+
+	// for dynamic workspaces if active workspace has no windows then do nothing
+	if (enabledDynamicWorkspaces === true) {
+		if (activeWorkspace !== null && activeWorkspace.n_windows === 0) {
+			return;
+		}
+	}
+
+	// reorder current and above workspace
+	global.workspace_manager.reorder_workspace(
+		activeWorkspace,
+		aboveWorkspaceIndex
+	)
+}
+
+function moveWorkspaceDown() {
+	const activeWorkspace = global.workspace_manager.get_active_workspace();
+	const workspaceIndexCount = global.workspace_manager.get_n_workspaces() - 1;
+	const activeWorkspaceIndex = activeWorkspace.index()
+
+	let belowWorkspaceIndex;
+	// if we are at the end the "below" workspace is the active workspace
+	if (activeWorkspaceIndex + 1 > workspaceIndexCount) {
+		belowWorkspaceIndex = activeWorkspaceIndex;
+	}
+	else {
+		belowWorkspaceIndex	= activeWorkspaceIndex + 1;
+	}
+
+	// if using dynamic workspaces, check below workspace for existance and
+	// presence of wirndows
+	if (enabledDynamicWorkspaces === true) {
+		const belowWorkspace = global.workspace_manager.get_workspace_by_index(belowWorkspaceIndex)
+		if (belowWorkspace !== null && belowWorkspace.n_windows === 0) {
+			return;
+		}
+	}
+
+	// reorder current and below workspace
+	global.workspace_manager.reorder_workspace(
+		activeWorkspace,
+		belowWorkspaceIndex
+	)
 }
