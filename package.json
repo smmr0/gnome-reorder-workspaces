@@ -3,9 +3,11 @@
 		"pnp": true
 	},
 	"scripts": {
-		"lint": "eslint ."
+		"build": "node build.js",
+		"lint": "eslint src/"
 	},
 	"devDependencies": {
+		"archiver": "^5.0.2",
 		"eslint": "^7.13.0"
 	}
 }
