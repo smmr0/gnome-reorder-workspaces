@@ -1,4 +1,5 @@
 /.pnp.js
 /.pnp/
+/.yarn/
 /dist/
 /yarn-error.log
