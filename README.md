@@ -16,4 +16,4 @@ up or down in the overview with `Alt`+`Up`/`Alt`+`Down`.
 1. [Optional] Install [nodenv](https://github.com/nodenv/nodenv).
 2. Install [yarn](https://yarnpkg.com/).
 3. Run `yarn install` to install dependencies.
-4. Run `yarn run install` to build and install the extension.
+4. Run `yarn gnome-install` to build and install the extension.
