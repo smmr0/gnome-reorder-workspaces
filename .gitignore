@@ -1,5 +1,4 @@
-/dist/*
-!/dist/.keep
+/dist/
 
 /.pnp.cjs
 /.pnp.loader.mjs
