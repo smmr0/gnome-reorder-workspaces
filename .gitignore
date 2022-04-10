@@ -1,4 +1,5 @@
-/.pnp.js
+/.pnp.cjs
+/.pnp.loader.mjs
 /.pnp/
 /.yarn/
 /dist/
