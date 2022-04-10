@@ -8,7 +8,7 @@
 	"scripts": {
 		"build": "gnome-extensions pack --extra-source \"$PROJECT_CWD/LICENSE\" -o dist/ --force src/",
 		"clean": "[ -f dist/reorder-workspaces@jer.dev.shell-extension.zip ] && rm dist/reorder-workspaces@jer.dev.shell-extension.zip",
-		"gnome-install": "yarn run build && gnome-extensions install \"$@\" dist/reorder-workspaces@jer.dev.shell-extension.zip && gnome-extensions enable reorder-workspaces@jer.dev && killall -3 gnome-shell",
+		"gnome-install": "yarn run build && gnome-extensions install \"$@\" dist/reorder-workspaces@jer.dev.shell-extension.zip && gnome-extensions enable reorder-workspaces@jer.dev && killall -3 -e gnome-shell",
 		"gnome-uninstall": "gnome-extensions uninstall reorder-workspaces@jer.dev",
 		"lint": "eslint src/"
 	},
