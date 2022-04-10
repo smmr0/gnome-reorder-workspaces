@@ -1,6 +1,8 @@
+/dist/
+
 /.pnp.cjs
 /.pnp.loader.mjs
 /.pnp/
+
 /.yarn/
-/dist/
 /yarn-error.log
