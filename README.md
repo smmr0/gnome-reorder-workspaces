@@ -2,7 +2,7 @@
 
 A [GNOME Shell](https://wiki.gnome.org/Projects/GnomeShell)
 [extension](https://wiki.gnome.org/Projects/GnomeShell/Extensions) to move
-[workspaces](https://help.gnome.org/users/gnome-help/stable/shell-workspaces.html.en)
+[workspaces](https://help.gnome.org/users/gnome-help/stable/shell-workspaces)
 up or down in the overview with `Alt`+`Up`/`Alt`+`Down`.
 
 ## Installation
