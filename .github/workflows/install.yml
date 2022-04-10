@@ -1,12 +1,13 @@
 name: Build
 on: [push, pull_request]
 jobs:
-  build:
+  install:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version-file: '.node-version'
+      - run: sudo apt install gnome-shell
       - run: yarn install
-      - run: yarn build
+      - run: yarn gnome-install
