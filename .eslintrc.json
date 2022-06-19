@@ -56,6 +56,12 @@
 		"no-undef": [
 			"off"
 		],
+		"no-unused-vars": [
+			"error",
+			{
+				"varsIgnorePattern": "^_"
+			}
+		],
 		"no-var": [
 			"error"
 		],

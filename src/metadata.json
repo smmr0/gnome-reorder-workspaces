@@ -6,11 +6,6 @@
 	"url": "https://github.com/jeremiahmegel/gnome-reorder-workspaces",
 	"settings-schema": "org.gnome.shell.extensions.reorder-workspaces",
 	"shell-version": [
-		"3.34",
-		"3.36",
-		"3.38",
-		"40",
-		"41",
 		"42",
 		"43"
 	]
