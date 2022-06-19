@@ -68,14 +68,14 @@ function enableKeybindings() {
 	const settings = ExtensionUtils.getSettings();
 
 	Main.wm.addKeybinding(
-		'move-workspace-up',
+		'move-workspace-prev',
 		settings,
 		Meta.KeyBindingFlags.NONE,
 		Shell.ActionMode.OVERVIEW,
 		moveWorkspaceUp.bind(this)
 	);
 	Main.wm.addKeybinding(
-		'move-workspace-down',
+		'move-workspace-next',
 		settings,
 		Meta.KeyBindingFlags.NONE,
 		Shell.ActionMode.OVERVIEW,
@@ -84,8 +84,8 @@ function enableKeybindings() {
 }
 
 function disableKeybindings() {
-	Main.wm.removeKeybinding('move-workspace-up');
-	Main.wm.removeKeybinding('move-workspace-down');
+	Main.wm.removeKeybinding('move-workspace-prev');
+	Main.wm.removeKeybinding('move-workspace-next');
 }
 
 

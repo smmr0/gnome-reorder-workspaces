@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
 	<schema id="org.gnome.shell.extensions.reorder-workspaces" path="/org/gnome/shell/extensions/reorder-workspaces/">
-		<key name="move-workspace-up" type="as">
+		<key name="move-workspace-prev" type="as">
 			<default><![CDATA[['<Alt>Up']]]></default>
-			<summary>Move active workspace one position up</summary>
+			<summary>Move active workspace one position previous</summary>
 		</key>
-		<key name="move-workspace-down" type="as">
+		<key name="move-workspace-next" type="as">
 			<default><![CDATA[['<Alt>Down']]]></default>
-			<summary>Move active workspace one position down</summary>
+			<summary>Move active workspace one position next</summary>
 		</key>
 	</schema>
 </schemalist>
