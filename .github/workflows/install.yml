@@ -8,6 +8,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version-file: '.node-version'
+      - run: sudo apt update
       - run: sudo apt install gnome-shell xvfb
       - run: yarn install
       - run: xvfb-run yarn gnome-install
