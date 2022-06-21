@@ -3,7 +3,7 @@
 	"name": "Reorder Workspaces",
 	"version": 10,
 	"description": "Reorder workspaces in the overview with Alt+Up/Alt+Down",
-	"url": "https://github.com/jeremiahmegel/gnome-reorder-workspaces",
+	"url": "https://github.com/smmr0/gnome-reorder-workspaces",
 	"settings-schema": "org.gnome.shell.extensions.reorder-workspaces",
 	"shell-version": [
 		"3.34",
