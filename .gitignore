@@ -1,8 +1,5 @@
 /dist/
 
-/.pnp.cjs
-/.pnp.loader.mjs
-/.pnp/
-
+/.pnp.*
+/.yarnrc.yml
 /.yarn/
-/yarn-error.log
