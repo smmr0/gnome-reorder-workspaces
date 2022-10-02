@@ -1,7 +1,7 @@
 {
 	"uuid": "reorder-workspaces@jer.dev",
 	"name": "Reorder Workspaces",
-	"version": 13,
+	"version": 14,
 	"description": "Reorder workspaces in the overview with Alt+Up/Alt+Down",
 	"url": "https://github.com/smmr0/gnome-reorder-workspaces",
 	"settings-schema": "org.gnome.shell.extensions.reorder-workspaces",
