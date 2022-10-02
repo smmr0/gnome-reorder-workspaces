@@ -21,6 +21,8 @@ class ReorderWorkspaces {
 	constructor() {
 		this.settings = ExtensionUtils.getSettings();
 		this.mutterSettings = new Gio.Settings({ schema_id: 'org.gnome.mutter' });
+		this.wmPreferencesSettings = new Gio.Settings({ schema_id: 'org.gnome.desktop.wm.preferences' });
+
 		this.overviewConnections = {
 			'showing': { callback: this.enableKeybindings.bind(this) },
 			'hiding': { callback: this.disableKeybindings.bind(this) }
@@ -92,7 +94,20 @@ class ReorderWorkspaces {
 			return;
 		}
 
+		let workspaceNames = this.wmPreferencesSettings.get_strv('workspace-names');
+		workspaceNames.length = Math.max(workspaceNames.length, currentIndex + 1, newIndex + 1);
+		const [activeWorkspaceName] = workspaceNames.splice(currentIndex, 1);
+		workspaceNames.splice(newIndex, 0, activeWorkspaceName);
+		workspaceNames = [...workspaceNames].map(wn => wn === undefined ? '' : wn);
+		for (let i = workspaceNames.length - 1; i >= 0; i--) {
+			if (workspaceNames[i] !== '') {
+				workspaceNames.length = i + 1;
+				break;
+			}
+		}
+
 		global.workspace_manager.reorder_workspace(activeWorkspace, newIndex);
+		this.wmPreferencesSettings.set_strv('workspace-names', workspaceNames);
 	}
 
 	workspaceIsEmptyDynamic(workspace) {
