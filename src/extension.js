@@ -17,110 +17,90 @@ const { Gio, Meta, Shell } = imports.gi;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Main = imports.ui.main;
 
-let overviewShowingId;
-let overviewHidingId;
+let overviewConnections,
+	keybindings,
+	mutterSettings;
 
-const MUTTER_SCHEMA = 'org.gnome.mutter';
-let mutterSettings;
-let dynamicWorkspacesId;
-let dynamicWorkspaces;
-
-function init() {} // eslint-disable-line no-unused-vars
+function init() { // eslint-disable-line no-unused-vars
+	overviewConnections = {
+		'showing': { callback: enableKeybindings.bind(this) },
+		'hiding': { callback: disableKeybindings.bind(this) }
+	};
+	keybindings = {
+		'move-workspace-prev': { distance: -1 },
+		'move-workspace-next': { distance: 1 }
+	};
+	mutterSettings = new Gio.Settings({ schema_id: 'org.gnome.mutter' });
+}
 
 function enable() { // eslint-disable-line no-unused-vars
-	mutterSettings = new Gio.Settings({ schema_id: MUTTER_SCHEMA });
-	dynamicWorkspacesId =
-		mutterSettings.connect(
-			'changed::dynamic-workspaces',
-			this.setDynamicWorkspaces.bind(this)
-		);
-	setDynamicWorkspaces();
-
-	if (Main.overview._visible) {
-		enableKeybindings();
-	}
-
-	overviewShowingId =
-		Main.overview.connect('showing', () => {
-			enableKeybindings();
-		});
-	overviewHidingId =
-		Main.overview.connect('hiding', () => {
-			disableKeybindings();
-		});
+	connectToOverview();
+	if (Main.overview._visible) { enableKeybindings(); }
 }
 
 function disable() { // eslint-disable-line no-unused-vars
 	disableKeybindings();
-
-	Main.overview.disconnect(overviewShowingId);
-	Main.overview.disconnect(overviewHidingId);
-	mutterSettings.disconnect(dynamicWorkspacesId);
+	disconnectFromOverview();
 }
 
-function setDynamicWorkspaces() {
-	dynamicWorkspaces = mutterSettings.get_boolean('dynamic-workspaces');
+function connectToOverview() {
+	for (const overviewConnectionName in overviewConnections) {
+		const overviewConnection = overviewConnections[overviewConnectionName];
+
+		overviewConnection.id =
+			Main.overview.connect(overviewConnectionName, overviewConnection.callback);
+	}
+}
+
+function disconnectFromOverview() {
+	overviewConnections
+		.map(oc => oc.id)
+		.filter(id => id !== undefined)
+		.forEach(id => Main.overview.disconnect(id));
 }
 
 function enableKeybindings() {
 	const settings = ExtensionUtils.getSettings();
 
-	Main.wm.addKeybinding(
-		'move-workspace-prev',
-		settings,
-		Meta.KeyBindingFlags.NONE,
-		Shell.ActionMode.OVERVIEW,
-		moveWorkspaceUp.bind(this)
-	);
-	Main.wm.addKeybinding(
-		'move-workspace-next',
-		settings,
-		Meta.KeyBindingFlags.NONE,
-		Shell.ActionMode.OVERVIEW,
-		moveWorkspaceDown.bind(this)
-	);
+	for (const keybindingName in keybindings) {
+		const keybinding = keybindings[keybindingName];
+
+		Main.wm.addKeybinding(
+			keybindingName,
+			settings,
+			Meta.KeyBindingFlags.NONE,
+			Shell.ActionMode.OVERVIEW,
+			moveWorkspace.bind(this, keybinding.distance)
+		);
+	}
 }
 
 function disableKeybindings() {
-	Main.wm.removeKeybinding('move-workspace-prev');
-	Main.wm.removeKeybinding('move-workspace-next');
+	for (const keybindingName in keybindings) {
+		Main.wm.removeKeybinding(keybindingName);
+	}
 }
 
-function moveWorkspaceUp() {
+function moveWorkspace(distance) {
 	const activeWorkspace = global.workspace_manager.get_active_workspace();
 
-	if (activeWorkspace.index() <= 0) {
+	if (workspaceIsEmptyDynamic(activeWorkspace)) {
 		return;
 	}
 
-	if (dynamicWorkspaces && activeWorkspace !== null && !workspaceHasWindows(activeWorkspace)) {
+	const currentIndex = activeWorkspace.index();
+	const newIndex = currentIndex + distance;
+	const workspaceAtNewIndex = global.workspace_manager.get_workspace_by_index(newIndex);
+
+	if (workspaceAtNewIndex === null || workspaceIsEmptyDynamic(workspaceAtNewIndex)) {
 		return;
 	}
 
-	global.workspace_manager.reorder_workspace(
-		activeWorkspace,
-		activeWorkspace.index() - 1
-	);
+	global.workspace_manager.reorder_workspace(activeWorkspace, newIndex);
 }
 
-function moveWorkspaceDown() {
-	const activeWorkspace = global.workspace_manager.get_active_workspace();
-
-	if (activeWorkspace.index() >= global.workspace_manager.get_n_workspaces() - 1) {
-		return;
-	}
-
-	const belowWorkspace = global.workspace_manager.get_workspace_by_index(activeWorkspace.index() + 1);
-	if (dynamicWorkspaces && belowWorkspace !== null && !workspaceHasWindows(belowWorkspace)) {
-		return;
-	}
-
-	global.workspace_manager.reorder_workspace(
-		activeWorkspace,
-		activeWorkspace.index() + 1
-	);
-}
-
-function workspaceHasWindows(workspace) {
-	return workspace.list_windows().some(w => !w.on_all_workspaces);
+function workspaceIsEmptyDynamic(workspace) {
+	return mutterSettings.get_boolean('dynamic-workspaces') &&
+		workspace.index() === global.workspace_manager.get_n_workspaces() - 1 &&
+		!workspace.list_windows().some(w => !w.on_all_workspaces);
 }
