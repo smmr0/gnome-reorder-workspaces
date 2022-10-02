@@ -93,7 +93,7 @@ function moveWorkspaceUp() {
 		return;
 	}
 
-	if (dynamicWorkspaces && activeWorkspace !== null && activeWorkspace.n_windows === 0) {
+	if (dynamicWorkspaces && activeWorkspace !== null && !workspaceHasWindows(activeWorkspace)) {
 		return;
 	}
 
@@ -111,7 +111,7 @@ function moveWorkspaceDown() {
 	}
 
 	const belowWorkspace = global.workspace_manager.get_workspace_by_index(activeWorkspace.index() + 1);
-	if (dynamicWorkspaces && belowWorkspace !== null && belowWorkspace.n_windows === 0) {
+	if (dynamicWorkspaces && belowWorkspace !== null && !workspaceHasWindows(belowWorkspace)) {
 		return;
 	}
 
@@ -119,4 +119,8 @@ function moveWorkspaceDown() {
 		activeWorkspace,
 		activeWorkspace.index() + 1
 	);
+}
+
+function workspaceHasWindows(workspace) {
+	return workspace.list_windows().some(w => !w.on_all_workspaces);
 }
