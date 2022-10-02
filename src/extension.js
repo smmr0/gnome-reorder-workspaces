@@ -23,19 +23,18 @@ let overviewHidingId;
 const MUTTER_SCHEMA = 'org.gnome.mutter';
 let mutterSettings;
 let dynamicWorkspacesId;
-let enabledDynamicWorkspaces;
+let dynamicWorkspaces;
 
 function init() {} // eslint-disable-line no-unused-vars
 
 function enable() { // eslint-disable-line no-unused-vars
-
 	mutterSettings = new Gio.Settings({ schema_id: MUTTER_SCHEMA });
-	dynamicWorkspacesId = mutterSettings.connect(
-		'changed::dynamic-workspaces',
-		this.updateWorkspacesType.bind(this)
-	);
-	// set initial workspace type
-	updateWorkspacesType();
+	dynamicWorkspacesId =
+		mutterSettings.connect(
+			'changed::dynamic-workspaces',
+			this.setDynamicWorkspaces.bind(this)
+		);
+	setDynamicWorkspaces();
 
 	if (Main.overview._visible) {
 		enableKeybindings();
@@ -51,17 +50,16 @@ function enable() { // eslint-disable-line no-unused-vars
 		});
 }
 
-function updateWorkspacesType() {
-	enabledDynamicWorkspaces = mutterSettings.get_boolean('dynamic-workspaces');
-}
-
-
 function disable() { // eslint-disable-line no-unused-vars
 	disableKeybindings();
 
 	Main.overview.disconnect(overviewShowingId);
 	Main.overview.disconnect(overviewHidingId);
 	mutterSettings.disconnect(dynamicWorkspacesId);
+}
+
+function setDynamicWorkspaces() {
+	dynamicWorkspaces = mutterSettings.get_boolean('dynamic-workspaces');
 }
 
 function enableKeybindings() {
@@ -88,27 +86,23 @@ function disableKeybindings() {
 	Main.wm.removeKeybinding('move-workspace-next');
 }
 
-
-function moveWorkspaceUp () {
+function moveWorkspaceUp() {
 	const activeWorkspace = global.workspace_manager.get_active_workspace();
 
 	let aboveWorkspaceIndex;
 	// if we are at the start the "above" workspace is the active workspace
 	if ((activeWorkspace.index() - 1) < 0) {
 		aboveWorkspaceIndex = 0;
-	}
-	else {
+	} else {
 		aboveWorkspaceIndex = activeWorkspace.index() - 1;
 	}
 
-	// for dynamic workspaces if active workspace has no windows then do nothing
-	if (enabledDynamicWorkspaces === true) {
+	if (dynamicWorkspaces === true) {
 		if (activeWorkspace !== null && activeWorkspace.n_windows === 0) {
 			return;
 		}
 	}
 
-	// reorder current and above workspace
 	global.workspace_manager.reorder_workspace(
 		activeWorkspace,
 		aboveWorkspaceIndex
@@ -124,21 +118,17 @@ function moveWorkspaceDown() {
 	// if we are at the end the "below" workspace is the active workspace
 	if (activeWorkspaceIndex + 1 > workspaceIndexCount) {
 		belowWorkspaceIndex = activeWorkspaceIndex;
-	}
-	else {
+	} else {
 		belowWorkspaceIndex = activeWorkspaceIndex + 1;
 	}
 
-	// if using dynamic workspaces, check below workspace for existance and
-	// presence of wirndows
-	if (enabledDynamicWorkspaces === true) {
+	if (dynamicWorkspaces === true) {
 		const belowWorkspace = global.workspace_manager.get_workspace_by_index(belowWorkspaceIndex);
 		if (belowWorkspace !== null && belowWorkspace.n_windows === 0) {
 			return;
 		}
 	}
 
-	// reorder current and below workspace
 	global.workspace_manager.reorder_workspace(
 		activeWorkspace,
 		belowWorkspaceIndex
