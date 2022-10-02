@@ -89,48 +89,34 @@ function disableKeybindings() {
 function moveWorkspaceUp() {
 	const activeWorkspace = global.workspace_manager.get_active_workspace();
 
-	let aboveWorkspaceIndex;
-	// if we are at the start the "above" workspace is the active workspace
-	if ((activeWorkspace.index() - 1) < 0) {
-		aboveWorkspaceIndex = 0;
-	} else {
-		aboveWorkspaceIndex = activeWorkspace.index() - 1;
+	if (activeWorkspace.index() <= 0) {
+		return;
 	}
 
-	if (dynamicWorkspaces === true) {
-		if (activeWorkspace !== null && activeWorkspace.n_windows === 0) {
-			return;
-		}
+	if (dynamicWorkspaces && activeWorkspace !== null && activeWorkspace.n_windows === 0) {
+		return;
 	}
 
 	global.workspace_manager.reorder_workspace(
 		activeWorkspace,
-		aboveWorkspaceIndex
+		activeWorkspace.index() - 1
 	);
 }
 
 function moveWorkspaceDown() {
 	const activeWorkspace = global.workspace_manager.get_active_workspace();
-	const workspaceIndexCount = global.workspace_manager.get_n_workspaces() - 1;
-	const activeWorkspaceIndex = activeWorkspace.index();
 
-	let belowWorkspaceIndex;
-	// if we are at the end the "below" workspace is the active workspace
-	if (activeWorkspaceIndex + 1 > workspaceIndexCount) {
-		belowWorkspaceIndex = activeWorkspaceIndex;
-	} else {
-		belowWorkspaceIndex = activeWorkspaceIndex + 1;
+	if (activeWorkspace.index() >= global.workspace_manager.get_n_workspaces() - 1) {
+		return;
 	}
 
-	if (dynamicWorkspaces === true) {
-		const belowWorkspace = global.workspace_manager.get_workspace_by_index(belowWorkspaceIndex);
-		if (belowWorkspace !== null && belowWorkspace.n_windows === 0) {
-			return;
-		}
+	const belowWorkspace = global.workspace_manager.get_workspace_by_index(activeWorkspace.index() + 1);
+	if (dynamicWorkspaces && belowWorkspace !== null && belowWorkspace.n_windows === 0) {
+		return;
 	}
 
 	global.workspace_manager.reorder_workspace(
 		activeWorkspace,
-		belowWorkspaceIndex
+		activeWorkspace.index() + 1
 	);
 }
