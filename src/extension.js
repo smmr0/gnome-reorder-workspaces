@@ -28,8 +28,8 @@ class ReorderWorkspaces {
 			'hiding': { callback: this.disableKeybindings.bind(this) }
 		};
 		this.keybindings = {
-			'move-workspace-prev': { distance: -1 },
-			'move-workspace-next': { distance: 1 }
+			'move-workspace-prev': { callback: this.moveWorkspace.bind(this, -1) },
+			'move-workspace-next': { callback: this.moveWorkspace.bind(this, 1) }
 		};
 	}
 
@@ -68,7 +68,7 @@ class ReorderWorkspaces {
 				this.settings,
 				Meta.KeyBindingFlags.NONE,
 				Shell.ActionMode.OVERVIEW,
-				this.moveWorkspace.bind(this, keybinding.distance)
+				keybinding.callback
 			);
 		}
 	}
