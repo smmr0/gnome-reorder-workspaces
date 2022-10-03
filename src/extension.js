@@ -53,7 +53,7 @@ class ReorderWorkspaces {
 	}
 
 	disconnectFromOverview() {
-		this.overviewConnections
+		Object.values(this.overviewConnections)
 			.map(oc => oc.id)
 			.filter(id => id !== undefined)
 			.forEach(id => Main.overview.disconnect(id));
