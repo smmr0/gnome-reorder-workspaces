@@ -19,10 +19,11 @@ const Main = imports.ui.main;
 
 class ReorderWorkspaces {
 	enable() {
-		this.settings = ExtensionUtils.getSettings();
-		this.mutterSettings = new Gio.Settings({ schema_id: 'org.gnome.mutter' });
-		this.wmPreferencesSettings = new Gio.Settings({ schema_id: 'org.gnome.desktop.wm.preferences' });
-
+		this.settings = {
+			self: ExtensionUtils.getSettings(),
+			mutter: new Gio.Settings({ schema_id: 'org.gnome.mutter' }),
+			wmPreferences: new Gio.Settings({ schema_id: 'org.gnome.desktop.wm.preferences' })
+		};
 		this.overviewConnections = {
 			'showing': { callback: this.enableKeybindings.bind(this) },
 			'hiding': { callback: this.disableKeybindings.bind(this) }
@@ -63,7 +64,7 @@ class ReorderWorkspaces {
 
 			Main.wm.addKeybinding(
 				keybindingName,
-				this.settings,
+				this.settings.self,
 				Meta.KeyBindingFlags.NONE,
 				Shell.ActionMode.OVERVIEW,
 				keybinding.callback
@@ -92,7 +93,7 @@ class ReorderWorkspaces {
 			return;
 		}
 
-		let workspaceNames = this.wmPreferencesSettings.get_strv('workspace-names');
+		let workspaceNames = this.settings.wmPreferences.get_strv('workspace-names');
 		workspaceNames.length = Math.max(workspaceNames.length, currentIndex + 1, newIndex + 1);
 		const [activeWorkspaceName] = workspaceNames.splice(currentIndex, 1);
 		workspaceNames.splice(newIndex, 0, activeWorkspaceName);
@@ -105,11 +106,11 @@ class ReorderWorkspaces {
 		}
 
 		global.workspace_manager.reorder_workspace(activeWorkspace, newIndex);
-		this.wmPreferencesSettings.set_strv('workspace-names', workspaceNames);
+		this.settings.wmPreferences.set_strv('workspace-names', workspaceNames);
 	}
 
 	workspaceIsEmptyDynamic(workspace) {
-		return this.mutterSettings.get_boolean('dynamic-workspaces') &&
+		return this.settings.mutter.get_boolean('dynamic-workspaces') &&
 			workspace.index() === global.workspace_manager.get_n_workspaces() - 1 &&
 			!workspace.list_windows().some(w => !w.on_all_workspaces);
 	}
