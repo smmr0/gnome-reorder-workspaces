@@ -13,7 +13,7 @@ in the overview with `Alt`+`Up`/`Alt`+`Down`.
 
 ### Manual
 
-1. [Optional] Install [nodenv](https://github.com/nodenv/nodenv).
-2. Install [Yarn](https://yarnpkg.com/).
-3. Run `yarn install` to install dependencies.
-4. Run `yarn gnome-install` to build and install the extension.
+1. Ensure that you are running the Node version specified in [`.node-version`](.node-version).
+2. `corepack enable`
+3. `yarn install`
+4. `yarn run gnome-install`
