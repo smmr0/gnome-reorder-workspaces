@@ -18,7 +18,7 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Main = imports.ui.main;
 
 class ReorderWorkspaces {
-	constructor() {
+	enable() {
 		this.settings = ExtensionUtils.getSettings();
 		this.mutterSettings = new Gio.Settings({ schema_id: 'org.gnome.mutter' });
 		this.wmPreferencesSettings = new Gio.Settings({ schema_id: 'org.gnome.desktop.wm.preferences' });
@@ -31,9 +31,7 @@ class ReorderWorkspaces {
 			'move-workspace-prev': { callback: this.moveWorkspace.bind(this, -1) },
 			'move-workspace-next': { callback: this.moveWorkspace.bind(this, 1) }
 		};
-	}
 
-	enable() {
 		this.connectToOverview();
 		if (Main.overview._visible) { this.enableKeybindings(); }
 	}
