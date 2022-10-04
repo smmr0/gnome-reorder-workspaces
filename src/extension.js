@@ -40,6 +40,10 @@ class ReorderWorkspaces {
 	disable() {
 		this.disableKeybindings();
 		this.disconnectFromOverview();
+
+		this.keybindings = null;
+		this.overviewConnections = null;
+		this.settings = null;
 	}
 
 	connectToOverview() {
