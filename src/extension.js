@@ -13,7 +13,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-const { Gio, Meta, Shell } = imports.gi;
+const { Meta, Shell } = imports.gi;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Main = imports.ui.main;
 
@@ -21,8 +21,8 @@ class ReorderWorkspaces {
 	enable() {
 		this.settings = {
 			self: ExtensionUtils.getSettings(),
-			mutter: new Gio.Settings({ schema_id: 'org.gnome.mutter' }),
-			wmPreferences: new Gio.Settings({ schema_id: 'org.gnome.desktop.wm.preferences' })
+			mutter: ExtensionUtils.getSettings('org.gnome.mutter'),
+			wmPreferences: ExtensionUtils.getSettings('org.gnome.desktop.wm.preferences')
 		};
 		this.overviewConnections = {
 			'showing': { callback: this.enableKeybindings.bind(this) },
