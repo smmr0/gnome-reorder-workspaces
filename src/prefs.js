@@ -24,7 +24,7 @@ function accelRow(settingsKeyName) {
 	model.set_column_types([GObject.TYPE_STRING]);
 	const [_ok, key, mods] =
 		Gtk.accelerator_parse(
-			settings.get_value(settingsKeyName).deep_unpack()[0]
+			settings.get_strv(settingsKeyName)[0]
 		);
 	model.set(model.insert(0), [0], [Gtk.accelerator_get_label(key, mods)]);
 
