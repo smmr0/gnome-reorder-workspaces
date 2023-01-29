@@ -34,7 +34,7 @@ class ReorderWorkspaces {
 		};
 
 		this.connectToOverview();
-		if (Main.actionMode === Shell.ActionMode.OVERVIEW) { this.enableKeybindings(); }
+		if (Main.overview._visible) { this.enableKeybindings(); }
 	}
 
 	disable() {
