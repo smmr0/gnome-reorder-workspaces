@@ -26,7 +26,7 @@ function accelRow(settingsKeyName) {
 		Gtk.accelerator_parse(
 			settings.get_strv(settingsKeyName)[0]
 		);
-	model.set(model.insert(0), [0], [Gtk.accelerator_get_label(key, mods)]);
+	model.set_value(model.append(), 0, Gtk.accelerator_get_label(key, mods));
 
 	const tree = new Gtk.TreeView({ model: model, headers_visible: false });
 	const column = new Gtk.TreeViewColumn();
