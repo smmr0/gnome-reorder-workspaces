@@ -47,27 +47,24 @@ class ReorderWorkspaces {
 	}
 
 	connectToOverview() {
-		for (const overviewConnectionName in this.overviewConnections) {
-			const overviewConnection = this.overviewConnections[overviewConnectionName];
-
-			overviewConnection.id =
-				Main.overview.connect(overviewConnectionName, overviewConnection.callback);
+		for (const [name, connection] of Object.entries(this.overviewConnections)) {
+			connection.id = Main.overview.connect(name, connection.callback);
 		}
 	}
 
 	disconnectFromOverview() {
-		Object.values(this.overviewConnections)
-			.map(oc => oc.id)
-			.filter(id => id !== undefined)
-			.forEach(id => Main.overview.disconnect(id));
+		for (const [_name, connection] of Object.entries(this.overviewConnections)) {
+			if (!connection.id) { return; }
+
+			Main.overview.disconnect(connection.id);
+			delete connection.id;
+		}
 	}
 
 	enableKeybindings() {
-		for (const keybindingName in this.keybindings) {
-			const keybinding = this.keybindings[keybindingName];
-
+		for (const [name, keybinding] of Object.entries(this.keybindings)) {
 			Main.wm.addKeybinding(
-				keybindingName,
+				name,
 				this.settings.self,
 				Meta.KeyBindingFlags.NONE,
 				Shell.ActionMode.OVERVIEW,
@@ -77,8 +74,8 @@ class ReorderWorkspaces {
 	}
 
 	disableKeybindings() {
-		for (const keybindingName in this.keybindings) {
-			Main.wm.removeKeybinding(keybindingName);
+		for (const [name, _keybinding] of Object.entries(this.keybindings)) {
+			Main.wm.removeKeybinding(name);
 		}
 	}
 
