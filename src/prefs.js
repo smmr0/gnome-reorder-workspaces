@@ -11,6 +11,7 @@ function fillPreferencesWindow(window) { // eslint-disable-line no-unused-vars
 	for (dir of ['prev', 'next']) {
 		group.add(accelRow(`move-workspace-${dir}`));
 	}
+	group.add(keybindingBehaviorOutsideOfOverviewRow());
 
 	window.add(page);
 }
@@ -56,6 +57,48 @@ function accelRow(settingsKeyName) {
 	const row = new Adw.ActionRow({ title: settingsKey.get_summary() });
 	row.add_suffix(tree);
 	row.activatable_widget = tree;
+
+	return row;
+}
+
+function keybindingBehaviorOutsideOfOverviewRow() {
+	const settings = ExtensionUtils.getSettings();
+	const settingsKeyName = 'keybinding-behavior-outside-of-overview';
+	const settingsKey = settings.settings_schema.get_key(settingsKeyName);
+
+	const comboBox = new Gtk.ComboBoxText();
+	for (const id of settingsKey.get_range().deep_unpack()[1].get_strv()) {
+		let text;
+		switch (id) {
+			case 'default':
+				text = 'Default';
+				break;
+			case 'reorder':
+				text = 'Reorder';
+				break;
+			case 'disabled':
+				text = 'Disabled';
+				break;
+		}
+
+		comboBox.append(id, text);
+	}
+	comboBox.set_active_id(settings.get_string(settingsKeyName));
+
+	comboBox.connect('changed', () => {
+		settings.set_string(settingsKeyName, comboBox.get_active_id());
+	});
+
+	const row = new Adw.ActionRow({
+		title: settingsKey.get_summary(),
+		subtitle: `
+			<b>Default:</b> Keybindings will behave normally. <i>(May cause choppy animation when opening/closing overview.)</i>
+			<b>Reorder:</b> Keybindings will reorder workspaces.
+			<b>Disabled:</b> Keybindings will have no effect.
+		`.trim().replace(/^[^\S\r\n]+/mg, '')
+	});
+	row.add_suffix(comboBox);
+	row.activatable_widget = comboBox;
 
 	return row;
 }

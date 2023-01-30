@@ -33,17 +33,41 @@ class ReorderWorkspaces {
 			'move-workspace-next': { callback: this.moveWorkspace.bind(this, 1) }
 		};
 
-		this.connectToOverview();
-		if (Main.overview._visible) { this.enableKeybindings(); }
+		this.setUpKeybindings({ reset: false });
+		this.settingsChangedConnectionId =
+			this.settings.self.connect('changed::keybinding-behavior-outside-of-overview', () => {
+				this.setUpKeybindings({ reset: true });
+			});
 	}
 
 	disable() {
+		this.settings.self.disconnect(this.settingsChangedConnectionId);
+
 		this.disconnectFromOverview();
 		this.disableKeybindings();
 
 		this.keybindings = null;
 		this.overviewConnections = null;
 		this.settings = null;
+	}
+
+	setUpKeybindings({ reset }) {
+		this.keybindingBehaviorOutsideOfOverview =
+			this.settings.self.get_string('keybinding-behavior-outside-of-overview');
+
+		if (this.keybindingBehaviorOutsideOfOverview === 'default') {
+			this.connectToOverview();
+		} else if (reset) {
+			this.disconnectFromOverview();
+		}
+
+		if (reset) { this.disableKeybindings(); }
+		if (
+			['reorder', 'disabled'].includes(this.keybindingBehaviorOutsideOfOverview) ||
+			Main.overview._visible
+		) {
+			this.enableKeybindings();
+		}
 	}
 
 	connectToOverview() {
@@ -62,12 +86,23 @@ class ReorderWorkspaces {
 	}
 
 	enableKeybindings() {
+		let actionMode;
+		switch (this.keybindingBehaviorOutsideOfOverview) {
+			case 'reorder':
+				actionMode = Shell.ActionMode.ALL;
+				break;
+			case 'default':
+			case 'disabled':
+			default:
+				actionMode = Shell.ActionMode.OVERVIEW;
+		}
+
 		for (const [name, keybinding] of Object.entries(this.keybindings)) {
 			Main.wm.addKeybinding(
 				name,
 				this.settings.self,
 				Meta.KeyBindingFlags.NONE,
-				Shell.ActionMode.OVERVIEW,
+				actionMode,
 				keybinding.callback
 			);
 		}

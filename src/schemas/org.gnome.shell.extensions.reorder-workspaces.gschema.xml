@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
+	<enum id="org.gnome.shell.extensions.reorder-workspaces.keybinding-behavior-outside-of-overview-options">
+		<value value="0" nick="default" />
+		<value value="1" nick="reorder" />
+		<value value="2" nick="disabled" />
+	</enum>
+
 	<schema id="org.gnome.shell.extensions.reorder-workspaces" path="/org/gnome/shell/extensions/reorder-workspaces/">
 		<key name="move-workspace-prev" type="as">
 			<default><![CDATA[['<Alt>Up']]]></default>
@@ -8,6 +14,10 @@
 		<key name="move-workspace-next" type="as">
 			<default><![CDATA[['<Alt>Down']]]></default>
 			<summary>Move active workspace one position next</summary>
+		</key>
+		<key name="keybinding-behavior-outside-of-overview" enum="org.gnome.shell.extensions.reorder-workspaces.keybinding-behavior-outside-of-overview-options">
+			<default><![CDATA['default']]></default>
+			<summary>Keybinding behavior outside of overview</summary>
 		</key>
 	</schema>
 </schemalist>
