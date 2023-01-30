@@ -1,5 +1,5 @@
 {
-	"packageManager": "yarn@4.0.0-rc.22",
+	"packageManager": "yarn@4.0.0-rc.37",
 	"config": {
 		"uuid": "reorder-workspaces@jer.dev"
 	},
@@ -11,6 +11,6 @@
 		"lint": "eslint src/"
 	},
 	"devDependencies": {
-		"eslint": "^8.24.0"
+		"eslint": "^8.33.0"
 	}
 }
