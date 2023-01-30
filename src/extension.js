@@ -38,8 +38,8 @@ class ReorderWorkspaces {
 	}
 
 	disable() {
-		this.disableKeybindings();
 		this.disconnectFromOverview();
+		this.disableKeybindings();
 
 		this.keybindings = null;
 		this.overviewConnections = null;
