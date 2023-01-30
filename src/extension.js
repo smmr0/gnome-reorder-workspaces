@@ -64,7 +64,7 @@ class ReorderWorkspaces {
 		if (reset) { this.disableKeybindings(); }
 		if (
 			['reorder', 'disabled'].includes(this.keybindingBehaviorOutsideOfOverview) ||
-			Main.overview._visible
+			Main.actionMode === Shell.ActionMode.OVERVIEW
 		) {
 			this.enableKeybindings();
 		}
