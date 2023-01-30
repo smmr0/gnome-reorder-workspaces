@@ -35,7 +35,7 @@ class ReorderWorkspaces {
 
 		this.setUpKeybindings({ reset: false });
 		this.settingsChangedConnectionId =
-			this.settings.self.connect('changed::keybinding-behavior-outside-of-overview', () => {
+			this.settings.self.connect('changed', () => {
 				this.setUpKeybindings({ reset: true });
 			});
 	}
@@ -72,6 +72,8 @@ class ReorderWorkspaces {
 
 	connectToOverview() {
 		for (const [name, connection] of Object.entries(this.overviewConnections)) {
+			if (connection.id) { return; }
+
 			connection.id = Main.overview.connect(name, connection.callback);
 		}
 	}
