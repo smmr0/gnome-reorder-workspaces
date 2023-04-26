@@ -16,6 +16,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 const { Meta, Shell } = imports.gi;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Main = imports.ui.main;
+const WorkspaceSwitcherPopup = imports.ui.workspaceSwitcherPopup.WorkspaceSwitcherPopup;
 
 class ReorderWorkspaces {
 	enable() {
@@ -45,6 +46,11 @@ class ReorderWorkspaces {
 
 		this.disconnectFromOverview();
 		this.disableKeybindings();
+
+		if (this.workspaceSwitcherPopup) {
+			this.workspaceSwitcherPopup.destroy();
+		}
+		this.workspaceSwitcherPopup = null;
 
 		this.keybindings = null;
 		this.overviewConnections = null;
@@ -145,12 +151,28 @@ class ReorderWorkspaces {
 
 		global.workspace_manager.reorder_workspace(activeWorkspace, newIndex);
 		this.settings.wmPreferences.set_strv('workspace-names', workspaceNames);
+
+		this.showWorkspaceSwitcherPopup(newIndex);
 	}
 
 	workspaceIsEmptyDynamic(workspace) {
 		return this.settings.mutter.get_boolean('dynamic-workspaces') &&
 			workspace.index() === global.workspace_manager.get_n_workspaces() - 1 &&
 			!workspace.list_windows().some(w => !w.on_all_workspaces);
+	}
+
+	showWorkspaceSwitcherPopup(index) {
+		if (Main.actionMode === Shell.ActionMode.OVERVIEW) {
+			return;
+		}
+
+		if (!this.workspaceSwitcherPopup) {
+			this.workspaceSwitcherPopup = new WorkspaceSwitcherPopup();
+			this.workspaceSwitcherPopup.connect('destroy', () => {
+				this.workspaceSwitcherPopup = null;
+			});
+		}
+		this.workspaceSwitcherPopup.display(index);
 	}
 }
 
