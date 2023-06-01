@@ -149,8 +149,8 @@ class ReorderWorkspaces {
 			}
 		}
 
-		global.workspace_manager.reorder_workspace(activeWorkspace, newIndex);
 		this.settings.wmPreferences.set_strv('workspace-names', workspaceNames);
+		global.workspace_manager.reorder_workspace(activeWorkspace, newIndex);
 
 		this.showWorkspaceSwitcherPopup(newIndex);
 	}
