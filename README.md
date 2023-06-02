@@ -3,7 +3,7 @@
 A [GNOME Shell](https://wiki.gnome.org/Projects/GnomeShell)
 [extension](https://wiki.gnome.org/Projects/GnomeShell/Extensions) to reorder
 [workspaces](https://help.gnome.org/users/gnome-help/stable/shell-workspaces)
-in the overview with `Alt`+`Up`/`Alt`+`Down`.
+with `Ctrl`+`Super`+`Up`/`Down`.
 
 ## Installation
 

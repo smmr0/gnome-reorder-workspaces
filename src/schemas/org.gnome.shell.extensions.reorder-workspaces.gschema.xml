@@ -8,15 +8,15 @@
 
 	<schema id="org.gnome.shell.extensions.reorder-workspaces" path="/org/gnome/shell/extensions/reorder-workspaces/">
 		<key name="move-workspace-prev" type="as">
-			<default><![CDATA[['<Alt>Up']]]></default>
+			<default><![CDATA[['<Control><Super>Up']]]></default>
 			<summary>Move active workspace one position previous</summary>
 		</key>
 		<key name="move-workspace-next" type="as">
-			<default><![CDATA[['<Alt>Down']]]></default>
+			<default><![CDATA[['<Control><Super>Down']]]></default>
 			<summary>Move active workspace one position next</summary>
 		</key>
 		<key name="keybinding-behavior-outside-of-overview" enum="org.gnome.shell.extensions.reorder-workspaces.keybinding-behavior-outside-of-overview-options">
-			<default><![CDATA['default']]></default>
+			<default><![CDATA['reorder']]></default>
 			<summary>Keybinding behavior outside of overview</summary>
 		</key>
 	</schema>
