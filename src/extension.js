@@ -137,20 +137,26 @@ class ReorderWorkspaces {
 			return;
 		}
 
-		let workspaceNames = this.settings.wmPreferences.get_strv('workspace-names');
-		workspaceNames.length = Math.max(workspaceNames.length, currentIndex + 1, newIndex + 1);
-		const [activeWorkspaceName] = workspaceNames.splice(currentIndex, 1);
-		workspaceNames.splice(newIndex, 0, activeWorkspaceName);
-		workspaceNames = [...workspaceNames].map(wn => wn === undefined ? '' : wn);
-		for (let i = workspaceNames.length - 1; i >= 0; i--) {
-			if (workspaceNames[i] !== '') {
-				workspaceNames.length = i + 1;
+		const currentWorkspaceNames = this.settings.wmPreferences.get_strv('workspace-names');
+		let newWorkspaceNames = [...currentWorkspaceNames];
+		newWorkspaceNames.length = Math.max(newWorkspaceNames.length, currentIndex + 1, newIndex + 1);
+		const [activeWorkspaceName] = newWorkspaceNames.splice(currentIndex, 1);
+		newWorkspaceNames.splice(newIndex, 0, activeWorkspaceName);
+		newWorkspaceNames = [...newWorkspaceNames].map(wn => wn === undefined ? '' : wn);
+		for (let i = newWorkspaceNames.length - 1; i >= 0; i--) {
+			if (newWorkspaceNames[i] !== '') {
+				newWorkspaceNames.length = i + 1;
 				break;
 			}
 		}
 
-		this.settings.wmPreferences.set_strv('workspace-names', workspaceNames);
-		global.workspace_manager.reorder_workspace(activeWorkspace, newIndex);
+		this.settings.wmPreferences.set_strv('workspace-names', newWorkspaceNames);
+		try {
+			global.workspace_manager.reorder_workspace(activeWorkspace, newIndex);
+		} catch(e) {
+			this.settings.wmPreferences.set_strv('workspace-names', currentWorkspaceNames);
+			throw e;
+		}
 
 		this.showWorkspaceSwitcherPopup(newIndex);
 	}
