@@ -153,6 +153,7 @@ class ReorderWorkspaces {
 		this.settings.wmPreferences.set_strv('workspace-names', newWorkspaceNames);
 		try {
 			global.workspace_manager.reorder_workspace(activeWorkspace, newIndex);
+			this.settings.wmPreferences.set_strv('workspace-names', newWorkspaceNames);
 		} catch(e) {
 			this.settings.wmPreferences.set_strv('workspace-names', currentWorkspaceNames);
 			throw e;
