@@ -1,5 +1,7 @@
-name: Install
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+  workflow_call:
 jobs:
   install:
     runs-on: ubuntu-latest
@@ -8,7 +10,9 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version-file: '.node-version'
+          cache: yarn
       - run: sudo apt update
       - run: sudo apt install gnome-shell xvfb
-      - run: yarn install
-      - run: xvfb-run yarn gnome-install
+      - run: corepack enable
+      - run: yarn install --immutable
+      - run: xvfb-run yarn run gnome-install
