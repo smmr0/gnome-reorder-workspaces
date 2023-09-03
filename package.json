@@ -1,5 +1,6 @@
 {
 	"packageManager": "yarn@4.0.0-rc.50",
+	"type": "module",
 	"config": {
 		"uuid": "reorder-workspaces@jer.dev"
 	},
