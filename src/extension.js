@@ -13,17 +13,18 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-const { Meta, Shell } = imports.gi;
-const ExtensionUtils = imports.misc.extensionUtils;
-const Main = imports.ui.main;
-const WorkspaceSwitcherPopup = imports.ui.workspaceSwitcherPopup.WorkspaceSwitcherPopup;
+import Meta from 'gi://Meta';
+import Shell from 'gi://Shell';
+import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+import { WorkspaceSwitcherPopup } from 'resource:///org/gnome/shell/ui/workspaceSwitcherPopup.js';
 
-class ReorderWorkspaces {
+export default class ReorderWorkspaces extends Extension {
 	enable() {
 		this.settings = {
-			self: ExtensionUtils.getSettings(),
-			mutter: ExtensionUtils.getSettings('org.gnome.mutter'),
-			wmPreferences: ExtensionUtils.getSettings('org.gnome.desktop.wm.preferences')
+			self: this.getSettings(),
+			mutter: this.getSettings('org.gnome.mutter'),
+			wmPreferences: this.getSettings('org.gnome.desktop.wm.preferences')
 		};
 		this.overviewConnections = {
 			'showing': { callback: this.enableKeybindings.bind(this) },

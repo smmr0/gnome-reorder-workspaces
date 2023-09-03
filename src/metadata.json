@@ -6,8 +6,6 @@
 	"url": "https://github.com/smmr0/gnome-reorder-workspaces",
 	"settings-schema": "org.gnome.shell.extensions.reorder-workspaces",
 	"shell-version": [
-		"42",
-		"43",
-		"44"
+		"45"
 	]
 }

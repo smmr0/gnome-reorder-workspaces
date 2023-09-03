@@ -4,7 +4,7 @@
 		"es2019": true // https://gitlab.gnome.org/GNOME/gjs/-/blob/gnome-3-38/doc/Home.md#L3
 	},
 	"parserOptions": {
-		"sourceType": "script"
+		"sourceType": "module"
 	},
 	"reportUnusedDisableDirectives": true,
 	"rules": {
