@@ -2,9 +2,6 @@
 	"private": true,
 	"packageManager": "yarn@4.0.0-rc.50",
 	"type": "module",
-	"config": {
-		"uuid": "reorder-workspaces@jer.dev"
-	},
 	"scripts": {
 		"build": "mkdir -p dist && gnome-extensions pack --extra-source \"$PROJECT_CWD/LICENSE\" $(ls \"$PROJECT_CWD/src/\"*\".js\" | sed 's/^/--extra-source /') -o dist/ --force src/",
 		"clean": "rm -r dist",
