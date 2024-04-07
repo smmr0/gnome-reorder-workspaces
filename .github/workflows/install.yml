@@ -10,7 +10,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: '.node-version'
-          cache: yarn
       - run: sudo apt update
       - run: sudo apt install gnome-shell xvfb
       - run: corepack enable

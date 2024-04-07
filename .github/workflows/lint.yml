@@ -10,7 +10,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: '.node-version'
-          cache: yarn
       - run: corepack enable
       - run: yarn install --immutable
       - run: yarn run lint
