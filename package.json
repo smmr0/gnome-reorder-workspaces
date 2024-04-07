@@ -1,9 +1,9 @@
 {
 	"private": true,
-	"packageManager": "yarn@4.0.2",
+	"packageManager": "yarn@4.1.1",
 	"type": "module",
 	"devDependencies": {
-		"eslint": "^8.54.0",
+		"eslint": "^9.0.0",
 		"eslint-config-summer": "git+https://github.com/smmr0/eslint-config-summer.git"
 	},
 	"scripts": {

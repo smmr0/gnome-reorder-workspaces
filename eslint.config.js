@@ -1,1 +1,8 @@
-export { default } from 'eslint-config-summer'
+import eslintConfigSummer from 'eslint-config-summer'
+
+export default [
+	{
+		ignores: eslintConfigSummer.ignores,
+	},
+	eslintConfigSummer,
+]
