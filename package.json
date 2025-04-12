@@ -1,6 +1,6 @@
 {
 	"private": true,
-	"packageManager": "yarn@4.5.0",
+	"packageManager": "yarn@4.9.1",
 	"type": "module",
 	"devDependencies": {
 		"eslint": "^9.12.0",
