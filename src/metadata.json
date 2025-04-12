@@ -1,7 +1,7 @@
 {
 	"uuid": "reorder-workspaces@jer.dev",
 	"name": "Reorder Workspaces",
-	"version": 24,
+	"version": 25,
 	"description": "Reorder workspaces with Ctrl+Super+Up/Down",
 	"url": "https://github.com/smmr0/gnome-reorder-workspaces",
 	"settings-schema": "org.gnome.shell.extensions.reorder-workspaces",
